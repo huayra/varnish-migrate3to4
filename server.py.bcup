@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(__file__)
 print ("dir:%s" % BASE_DIR)
 
 UPLOAD_FOLDER = 'files'
-ALLOWED_EXTENSIONS = set(['vcl'])
+ALLOWED_EXTENSIONS = set(['txt','jpg','pdf','apk','ppt','doc','png','img','tgz','zip','tar','bz2'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -45,7 +45,6 @@ def list_directory(path):
 
         for name in list:
             fullname = os.path.join(path, name)
-	    print "Let's talk about %s." %name
             displayname = linkname = name
             # Append / for directories or @ for symbolic links
             if os.path.isdir(fullname):
@@ -86,7 +85,7 @@ def index():
     <h1>Upload new File</h1>
     <form action="" method=post enctype=multipart/form-data>
       <p><input type=file name=file>
-         <input type=submit value=Convert>
+         <input type=submit value=Upload>
     </form>
     %s
     """ % "<br>".join(list_directory(app.config['UPLOAD_FOLDER']))
