@@ -5,9 +5,11 @@ import os
 
 for filename in os.listdir('/home/syeda/vagrant/varnish-migrate3to4/files'):
     if filename.endswith(".vcl"):
-        print filename
+#        print filename
         outfile_name = '{0}{1}'.format(filename,".v4")
-        print outfile_name
+#        print outfile_name
         call_cmd = 'python varnish3to4 -o {0} {1}'.format(outfile_name, filename)
-        print call_cmd
+        call_diff = 'diff -u {0} {1}'.format(outfile_name, filename)
+#        print call_cmd
         subprocess.call(call_cmd, shell=True)
+        subprocess.call(call_diff, shell=True)
