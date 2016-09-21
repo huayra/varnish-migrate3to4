@@ -4,8 +4,9 @@ import os
 
 #filename='/home/syeda/vagrant/varnish-migrate3to4/files/testvcl.vcl'
 
-
+#path='/home/syeda/vagrant/varnish-migrate3to4/files/'
 #call_cmd = 'python varnish3to4 -o {0} {1}'.format("blaaa", filename)
+#for filename in os.listdir('/home/syeda/vagrant/varnish-migrate3to4/files')
 
 for filename in os.listdir('/home/syeda/vagrant/varnish-migrate3to4/files'):
     if filename.endswith(".vcl"):
