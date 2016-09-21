@@ -44,19 +44,17 @@ def list_directory(path):
         f.write("<form ENCTYPE=\"multipart/form-data\" method=\"post\">")
 
         for name in list:
-                fullname = os.path.join(path, name)
-
-        print "Let's talk about %s." %name
-        displayname = linkname = name
+            fullname = os.path.join(path, name)
+            displayname = linkname = name
             # Append / for directories or @ for symbolic links
-        if os.path.isdir(fullname):
-            displayname = name + "/"
-            linkname = name + "/"
-        if os.path.islink(fullname):
-            displayname = name + "@"
+            if os.path.isdir(fullname):
+                displayname = name + "/"
+                linkname = name + "/"
+            if os.path.islink(fullname):
+                displayname = name + "@"
                 # Note: a link to a directory displays with @ and links with /
-        f.write('<li><a href="uploads/%s">%s</a>\n'
-            % (urllib.quote(linkname), cgi.escape(displayname)))
+            f.write('<li><a href="uploads/%s">%s</a>\n'
+                    % (urllib.quote(linkname), cgi.escape(displayname)))
         f.write("</ul>\n<hr>\n</body>\n</html>\n")
         length = f.tell()
         f.seek(0)
@@ -89,7 +87,7 @@ def index():
       <p><input type=file name=file>
          <input type=submit value=Upload>
     </form>
-    <a href="/my-link/">Click me</a>
+    <a href="/my-link/">Convert</a>
     %s
     """ % "<br>".join(list_directory(app.config['UPLOAD_FOLDER']))
 
@@ -97,14 +95,14 @@ def index():
 
 @app.route('/my-link/')
 def my_link():
-  print 'I got clicked!'
   import subprocess
   import os
-
-  for filename in os.listdir('/home/syeda/vagrant/varnish-migrate3to4'):
+  path='/home/syeda/vagrant/varnish-migrate3to4/files/'
+  for filename in os.listdir('/home/syeda/vagrant/varnish-migrate3to4/files'):
       if filename.endswith(".vcl"):
           outfile_name = '{0}{1}'.format(filename,".v4")
-          call_cmd = 'python varnish3to4 -o {0} {1}'.format(outfile_name, filename)
+          call_cmd = 'python varnish3to4 -o {0} {1}{2}'.format(outfile_name, path, filename)
+          print call_cmd
           call_diff = 'diff -u {0} {1}'.format(outfile_name, filename)
           subprocess.call(call_cmd, shell=True)
           subprocess.call(call_diff, shell=True)
