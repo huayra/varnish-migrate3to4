@@ -14,3 +14,9 @@ visit http://localhost:5001 to upload files, you can visit uploaded files on the
 
 **Varnish Migrator from varnish3to4**
 https://github.com/fgsch/varnish3to4
+
+Add test.py to crontab with:
+
+crontab -e
+
+*/1 * * * * /usr/bin/python test.py
