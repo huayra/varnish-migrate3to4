@@ -8,10 +8,16 @@ A Simple PoC Web App for VCL migration
 
 To test it:
 
+- Clone repository
+
+  cd varnish-migrate3to4
+
 - Run server.py
+
   $ python server.py
 
 - Open browser to view page
+
   http://0.0.0.0:5001/
 
 - Upload a vcl file
@@ -33,7 +39,11 @@ Requirements
 ............
 
 - Flask
+
   $ pip install Flask
+
+- Tar
+
   $ apt-get install tar
 
 Resources
