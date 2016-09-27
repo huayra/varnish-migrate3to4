@@ -72,12 +72,31 @@ def download(filename):
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    import subprocess
+    import os
+#    import tarfile
     if request.method == 'POST':
         file = request.files['file']
         if file and allowed_file(file.filename):
             print('filename:%s' % file.filename)
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            #start here
+            dir_abs=os.path.abspath('.')
+            path=os.path.join(dir_abs, 'files/')
+            dir_file=os.path.join(dir_abs, 'files')
+        #    path='/home/syeda/vagrant/varnish-migrate3to4/files/'
+        #    dir_file='/home/syeda/vagrant/varnish-migrate3to4/files'
+            for filename in os.listdir(dir_file):
+                if filename.endswith(".vcl"):
+                    outfile_name = '{0}{1}'.format(filename,".v4")
+                    call_cmd = 'python varnish3to4 -o {0}{1} {2}{3}'.format(path, outfile_name, path, filename)
+                    subprocess.call(call_cmd, shell=True)
+                    diff_out = '{0}{1}'.format(filename,".diff")
+                    os.system('diff -u {0}{1} {2}{3} >> {4}{5}'.format(path, outfile_name, path, filename, path, diff_out))
+                    os.system('tar -zcvf {0}{1} -C {2} .'.format(path, "vcl.tar.gz", dir_file))
+            #ends here
             return redirect(url_for('index'))
     return """
     <!doctype html>
@@ -85,28 +104,12 @@ def index():
     <h1>Upload new File</h1>
     <form action="" method=post enctype=multipart/form-data>
       <p><input type=file name=file>
-         <input type=submit value=Upload>
+         <input type=submit value=CONVERT>
     </form>
-    <a href="/my-link/">Convert</a>
     %s
     """ % "<br>".join(list_directory(app.config['UPLOAD_FOLDER']))
 
 # To migrate file in directory to vcl4
-
-@app.route('/my-link/')
-def my_link():
-  import subprocess
-  import os
-  path='/home/syeda/vagrant/varnish-migrate3to4/files/'
-  for filename in os.listdir('/home/syeda/vagrant/varnish-migrate3to4/files'):
-      if filename.endswith(".vcl"):
-          outfile_name = '{0}{1}'.format(filename,".v4")
-          call_cmd = 'python varnish3to4 -o {0} {1}{2}'.format(outfile_name, path, filename)
-          print call_cmd
-          call_diff = 'diff -u {0} {1}'.format(outfile_name, filename)
-          subprocess.call(call_cmd, shell=True)
-          subprocess.call(call_diff, shell=True)
-  return outfile_name
 
 # vcl 4 migration ends here
 

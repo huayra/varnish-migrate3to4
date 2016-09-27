@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os.path,random,re,json
 from werkzeug._compat import unichr, text_type,PY2
 

@@ -20,12 +20,21 @@ To test it:
 
 - Converted file is stored with extension `.v4`
 
+- Converted folder to tarball with tar
+
+
+**TARGET**
+
+To directly convert uploaded file to v4 and convert to tarball
+then display tarball for download
+
+
 Requirements
 ............
 
 - Flask
   $ pip install Flask
-
+  $ apt-get install tar
 
 Resources
 .........
