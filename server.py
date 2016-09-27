@@ -1,4 +1,5 @@
-# simple file uploader and downloader service
+# simple file uploader that converts vcl3 to vcl4
+# returns a number of files: .vcl4, changes made .dff and a tar with all the files  
 
 import os
 import urllib
@@ -15,7 +16,7 @@ BASE_DIR = os.path.dirname(__file__)
 
 print ("dir:%s" % BASE_DIR)
 
-os.system('mkdir files')
+os.system('mkdir -p files')
 
 UPLOAD_FOLDER = 'files'
 ALLOWED_EXTENSIONS = set(['vcl'])
@@ -42,7 +43,7 @@ def list_directory(path):
         list.sort(key=lambda a: a.lower())
         f = StringIO()
         displaypath = cgi.escape(urllib.unquote(path))
-        f.write("<body><h2>Directory listing for %s</h2>" % displaypath)
+        f.write("<body><h3>Your Uploaded and Converted %s</h3>" % displaypath)
         f.write("<form ENCTYPE=\"multipart/form-data\" method=\"post\">")
 
         for name in list:
@@ -88,8 +89,7 @@ def index():
             dir_abs=os.path.abspath('.')
             path=os.path.join(dir_abs, 'files/')
             dir_file=os.path.join(dir_abs, 'files')
-        #    path='/home/syeda/vagrant/varnish-migrate3to4/files/'
-        #    dir_file='/home/syeda/vagrant/varnish-migrate3to4/files'
+
             for filename in os.listdir(dir_file):
                 if filename.endswith(".vcl"):
                     outfile_name = '{0}{1}'.format(filename,".v4")
@@ -98,7 +98,7 @@ def index():
                     diff_out = '{0}{1}'.format(filename,".diff")
                     os.system('diff -u {0}{1} {2}{3} >> {4}{5}'.format(path, outfile_name, path, filename, path, diff_out))
                     os.system('tar -zcvf {0}{1} -C {2} .'.format(path, "vcl.tar.gz", dir_file))
-            #ends here
+
             return redirect(url_for('index'))
     return """
     <!doctype html>
@@ -114,10 +114,6 @@ def index():
     </form>
     %s
     """ % "<br>".join(list_directory(app.config['UPLOAD_FOLDER']))
-
-# To migrate file in directory to vcl4
-
-# vcl 4 migration ends here
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5001, debug=True)
