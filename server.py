@@ -102,8 +102,12 @@ def index():
             return redirect(url_for('index'))
     return """
     <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
+    <title>Varnish3to4</title>
+
+    <h1>Varnish3to4 Migrator</h1>
+
+    Migrate your varnish 3 codes on the fly.
+
     <form action="" method=post enctype=multipart/form-data>
       <p><input type=file name=file>
          <input type=submit value=CONVERT>
