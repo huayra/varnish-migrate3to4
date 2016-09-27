@@ -15,6 +15,8 @@ BASE_DIR = os.path.dirname(__file__)
 
 print ("dir:%s" % BASE_DIR)
 
+os.system('mkdir files')
+
 UPLOAD_FOLDER = 'files'
 ALLOWED_EXTENSIONS = set(['vcl'])
 
