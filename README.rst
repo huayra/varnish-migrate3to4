@@ -32,8 +32,14 @@ To test it:
 **TARGET**
 
 To directly convert uploaded file to v4 and convert to tarball
-then display tarball for download
+then display tarball for download.
 
+There is also a deloldfiles.py script, that deletes files in folder 'files' every 60seconds.
+It can be added as a cron job.
+
+Further enhancement:
+
+When the button is clicked, it should serve the tarball and not save anything.
 
 Requirements
 ............
