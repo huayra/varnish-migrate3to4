@@ -1,5 +1,5 @@
 # simple file uploader that converts vcl3 to vcl4
-# returns a number of files: .vcl4, changes made .dff and a tar with all the files  
+# returns a number of files: .vcl4, changes made .dff and a tar with all the files
 
 import os
 import urllib
@@ -77,6 +77,7 @@ def download(filename):
 def index():
     import subprocess
     import os
+    import time
 #    import tarfile
     if request.method == 'POST':
         file = request.files['file']
@@ -89,15 +90,21 @@ def index():
             dir_abs=os.path.abspath('.')
             path=os.path.join(dir_abs, 'files/')
             dir_file=os.path.join(dir_abs, 'files')
+            os.system('mkdir -p vcl_tar')
+            path_tar=os.path.join(dir_abs, 'vcl_tar/')
+            dir_tar=os.path.join(dir_abs, 'vcl_tar')
+            timestr = time.strftime("%Y%m%d-%H%M%S")
 
             for filename in os.listdir(dir_file):
                 if filename.endswith(".vcl"):
                     outfile_name = '{0}{1}'.format(filename,".v4")
-                    call_cmd = 'python varnish3to4 -o {0}{1} {2}{3}'.format(path, outfile_name, path, filename)
+                    call_cmd = 'python varnish3to4 -o {0}{1} {2}{3}'.format(path_tar, outfile_name, path, filename)
                     subprocess.call(call_cmd, shell=True)
                     diff_out = '{0}{1}'.format(filename,".diff")
-                    os.system('diff -u {0}{1} {2}{3} >> {4}{5}'.format(path, outfile_name, path, filename, path, diff_out))
-                    os.system('tar -zcvf {0}{1} -C {2} .'.format(path, "vcl.tar.gz", dir_file))
+                    os.system('diff -u {0}{1} {2}{3} >> {4}{5}'.format(path_tar, outfile_name, path, filename, path_tar, diff_out))
+                    os.system('mv {0}{1} {2}{3}'.format(path, filename, path_tar, filename))
+                    os.system('tar -zcvf {0}{1}{2} -C {3} .'.format(path, timestr, ".vcl.tar.gz", dir_tar))
+                    os.system('rm -rf {0}'.format(dir_tar))
 
             return redirect(url_for('index'))
     return """
