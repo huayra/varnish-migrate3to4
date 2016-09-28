@@ -1,4 +1,6 @@
 #!/usr/bin/python
+#this script deletes files older then 60seconds from the files folder
+#this can be activated via cron job
 
 import os, sys, time
 from subprocess import call
