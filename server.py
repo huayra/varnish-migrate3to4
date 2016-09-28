@@ -43,7 +43,7 @@ def list_directory(path):
         list.sort(key=lambda a: a.lower())
         f = StringIO()
         displaypath = cgi.escape(urllib.unquote(path))
-        f.write("<body><h3>Your Uploaded and Converted %s</h3>" % displaypath)
+        f.write("<body><h4>Your VCL tarball:</h4>")
         f.write("<form ENCTYPE=\"multipart/form-data\" method=\"post\">")
 
         for name in list:
@@ -56,9 +56,9 @@ def list_directory(path):
             if os.path.islink(fullname):
                 displayname = name + "@"
                 # Note: a link to a directory displays with @ and links with /
-            f.write('<li><a href="uploads/%s">%s</a>\n'
+            f.write('<a href="uploads/%s">%s</a>\n'
                     % (urllib.quote(linkname), cgi.escape(displayname)))
-        f.write("</ul>\n<hr>\n</body>\n</html>\n")
+        f.write("\n<hr>\n</body>\n</html>\n")
         length = f.tell()
         f.seek(0)
         #self.send_response(200)
@@ -105,6 +105,9 @@ def index():
                     os.system('mv {0}{1} {2}{3}'.format(path, filename, path_tar, filename))
                     os.system('tar -zcvf {0}{1}{2} -C {3} .'.format(path, timestr, ".vcl.tar.gz", dir_tar))
                     os.system('rm -rf {0}'.format(dir_tar))
+                # removes last tar file in folder
+                else:
+                    os.remove(str(path) + filename)
 
             return redirect(url_for('index'))
     return """
@@ -117,7 +120,7 @@ def index():
 
     <form action="" method=post enctype=multipart/form-data>
       <p><input type=file name=file>
-         <input type=submit value=CONVERT>
+         <input type=submit value=Convert>
     </form>
     %s
     """ % "<br>".join(list_directory(app.config['UPLOAD_FOLDER']))
