@@ -11,6 +11,8 @@ To this service:
  - Highlight changes in VCL from 2.1 through 5
  - Highlight parameter changes
  - Highlight changes in libvarnishapi and more specifically in VarnishLog (VSL)
+ - Give users information on migration tips/best practices for their Utilities, Extras and VMODs from 2.1 through 5.0
+ - Give users information on migration tips/best practices for Inline C and VMODs from 3.0 through 5.0
  - Changelog
 
 To Varnish3to4:
